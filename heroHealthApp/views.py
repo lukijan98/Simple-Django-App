@@ -15,6 +15,7 @@ def createConfig(request, device_id):
 	config = Config.objects.filter(device=device_id).order_by('-id').first()
 	device = Device.objects.get(id=device_id)
 	serializer = None
+	print("Test")
 	if config is None:
 		serializer = ConfigFrontendSerializer(data=request.data, context={'device':device})
 	else:
