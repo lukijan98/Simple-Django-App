@@ -14,7 +14,7 @@ class PillSerializer(serializers.ModelSerializer):
 
 
 class ConfigFrontendSerializer(serializers.ModelSerializer):
-    pills = PillSerializer(source='pill_set',many=True)
+    pills = PillSerializer(source='pill_set', many=True)
 
     class Meta:
         model = Config
@@ -28,3 +28,23 @@ class ConfigFrontendSerializer(serializers.ModelSerializer):
             Pill.objects.create(config=config, **pill)
         return config
 
+    def update(self, instance, validated_data):
+        if self.hasChanged(instance, validated_data):
+            config = self.create(validated_data)
+            Config.objects.filter(id=instance.id).update(active=False)
+            return config
+        else:
+            return instance
+
+
+    def hasChanged(self, instance, validated_data):
+        if instance.passcode != validated_data["passcode"]:
+            return True
+        if instance.timezone_name != validated_data["timezone_name"]:
+            return True
+        instance_pills = Pill.objects.filter(config_id=instance.id)
+        for pill in validated_data['pill_set']:
+            find = instance_pills.filter(**pill)
+            if not find.exists():
+                return True
+        return False

@@ -12,10 +12,9 @@ from .models import Config, Device
 @api_view(['POST'])
 @permission_classes((permissions.AllowAny,))
 def createConfig(request, device_id):
-	config = Config.objects.filter(device=device_id).order_by('-id').first()
+	config = Config.objects.get(device=device_id,active=True)
 	device = Device.objects.get(id=device_id)
 	serializer = None
-	print("Test")
 	if config is None:
 		serializer = ConfigFrontendSerializer(data=request.data, context={'device':device})
 	else:
