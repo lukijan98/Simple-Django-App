@@ -92,7 +92,7 @@ class ConfigDeviceSerializer(serializers.Serializer):
 class PillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pill
-        exclude = ['config']
+        exclude = ['id','config']
 
 
 class ConfigFrontendSerializer(serializers.ModelSerializer):
@@ -100,7 +100,7 @@ class ConfigFrontendSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Config
-        exclude = ['device', 'active']
+        exclude = ['id','device', 'active']
 
     def create(self, validated_data):
         pills_data = validated_data.pop('pill_set')
@@ -130,3 +130,8 @@ class ConfigFrontendSerializer(serializers.ModelSerializer):
             if not find.exists():
                 return True
         return False
+
+class ConfigSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Config
+        fields = '__all__'
