@@ -27,7 +27,7 @@ def frontendConfig(request, device_id):
     if serializer.is_valid():
         if serializer.save() is not None:
             return Response(status.HTTP_200_OK)
-    return Response(status.HTTP_404_NOT_FOUND)
+    return Response(status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])
@@ -45,7 +45,7 @@ def deviceConfig(request, device_id):
     if serializer.is_valid():
         if serializer.save() is not None:
             return Response(status.HTTP_200_OK)
-    return Response(status.HTTP_404_NOT_FOUND)
+    return Response(status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
 @permission_classes((permissions.AllowAny,))
